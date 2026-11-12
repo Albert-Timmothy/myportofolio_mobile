@@ -4,13 +4,13 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   final String npm = '2506656381';
-  final String nama = 'Albert';
+  final String nama = 'Albert Timmothy Ariajaya';
   final String kelas = 'PBP F';
 
   static const List<ItemHomepage> items = [
-    ItemHomepage('Lihat Proyek', Icons.folder),
-    ItemHomepage('Tambah Proyek', Icons.add_circle),
-    ItemHomepage('Logout', Icons.logout),
+    ItemHomepage('Lihat Proyek', Icons.folder, Color(0xFF1565C0)),
+    ItemHomepage('Tambah Proyek', Icons.add_circle, Color(0xFF2E7D32)),
+    ItemHomepage('Logout', Icons.logout, Color(0xFFC62828)),
   ];
 
   @override
@@ -55,7 +55,7 @@ class MyHomePage extends StatelessWidget {
               crossAxisCount: 3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              mainAxisExtent: 130,
+              mainAxisExtent: 160,
               padding: const EdgeInsets.symmetric(vertical: 20),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -96,7 +96,10 @@ class ItemHomepage {
   final String name;
   final IconData icon;
 
-  const ItemHomepage(this.name, this.icon);
+  // Warna merupakan data tiap menu, bukan percabangan di widget kartu.
+  final Color color;
+
+  const ItemHomepage(this.name, this.icon, this.color);
 }
 
 class ItemCard extends StatelessWidget {
@@ -106,9 +109,8 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     return Material(
-      color: colors.secondary,
+      color: item.color,
       borderRadius: BorderRadius.circular(12),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -126,12 +128,12 @@ class ItemCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon, color: colors.onSecondary, size: 30),
+              Icon(item.icon, color: Colors.white, size: 30),
               const SizedBox(height: 6),
               Text(
                 item.name,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: colors.onSecondary),
+                style: TextStyle(color: Colors.white),
               ),
             ],
           ),
