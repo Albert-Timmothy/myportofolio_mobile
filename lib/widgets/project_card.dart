@@ -1,3 +1,4 @@
+import 'package:myportofolio_mobile/screens/education_form.dart';
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
@@ -25,13 +26,19 @@ class ItemCard extends StatelessWidget {
               ),
             );
 
-          // Navigate ke halaman yang sesuai
-          if (item.name == 'Tambah Proyek') {
+          if (item.name == 'Tambah Edukasi') {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ProjectFormPage(),
+                builder: (context) => const EducationFormPage(),
               ),
+            );
+          }
+          // Navigasi ke halaman yang sesuai
+          if (item.name == 'Tambah Proyek') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProjectFormPage()),
             );
           }
         },

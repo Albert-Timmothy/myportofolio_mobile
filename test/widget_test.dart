@@ -12,7 +12,7 @@ void main() {
     expect(find.text('2506656381'), findsOneWidget);
     expect(find.text('PBP F'), findsOneWidget);
 
-    for (final label in ['Lihat Proyek', 'Tambah Proyek', 'Logout']) {
+    for (final label in ['Lihat Proyek', 'Logout']) {
       await tester.tap(find.text(label));
       await tester.pumpAndSettle();
       expect(find.text('Kamu telah menekan tombol $label!'), findsOneWidget);
@@ -21,6 +21,55 @@ void main() {
     }
     expect(tester.takeException(), isNull);
   });
+  testWidgets(
+    'Form edukasi memvalidasi dan menampilkan ringkasan pada layar kecil',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(const MyApp());
+      await tester.ensureVisible(find.text('Tambah Edukasi'));
+      await tester.tap(find.text('Tambah Edukasi'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextFormField).first, '   ');
+      await tester.tap(find.text('Simpan'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(
+        find.text('Nama institusi wajib diisi, bukan hanya spasi.'),
+        findsOneWidget,
+      );
+      await tester.enterText(
+        find.byType(TextFormField).first,
+        'Universitas Indonesia',
+      );
+      await tester.enterText(find.byType(TextFormField).last, 'Ilmu Komputer');
+      await tester.ensureVisible(find.text('Simpan'));
+      await tester.tap(find.text('Simpan'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Institusi: Universitas Indonesia'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Tutup'));
+      await tester.pumpAndSettle();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('MyPortfolio'), findsOneWidget);
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Tambah Edukasi'));
+      await tester.pumpAndSettle();
+      expect(find.byType(Form), findsOneWidget);
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Home'));
+      await tester.pumpAndSettle();
+      expect(find.text('MyPortfolio'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets(
     'Action cards use distinct backgrounds and readable foregrounds',
     (tester) async {

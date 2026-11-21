@@ -28,7 +28,7 @@ Untuk Android, siapkan Android SDK dan emulator atau perangkat fisik terlebih da
 | Berkas | Isi |
 | --- | --- |
 | `lib/main.dart` | Entry point, `MyApp`, dan tema aplikasi. |
-| `lib/menu.dart` | Halaman `MyHomePage`, `InfoCard`, model `ItemHomepage`, dan `ItemCard`. |
+| `lib/screens/menu.dart` | Halaman `MyHomePage`, `InfoCard`, model `ItemHomepage`, dan `ItemCard`. |
 | `test/widget_test.dart` | Pemeriksaan identitas, pesan tiap tombol, warna berbeda, dan layout layar kecil. |
 | `docs/ai-log.md` | Catatan prompt serta bagian yang dibantu AI. |
 
@@ -100,4 +100,38 @@ Untuk mencoba secara manual, tekan masing-masing kartu dan periksa pesan yang mu
 ## AI Disclosure
 
 Saya menggunakan ChatGPT/Codex untuk membantu membaca tugas, mengecek proyek Tutorial 08, mengubah kode, membuat widget test. Strategi prompting saya bertahap: meminta pengecekan progres, mengikuti panduan instalasi, meminta untuk mengjarkan dan memandu mengerjakan tugas.
+
+
+### Tugas 8
+
+1. **Perbedaan navigasi dan alur kembali**
+
+   Menurut saya, `Navigator.push()` menambahkan halaman di atas tumpukan sehingga halaman sebelumnya tetap tersedia. Saya menggunakannya pada kartu Tambah Edukasi. `Navigator.pop()` menghapus route teratas, misalnya saat kembali dari form atau menutup dialog. `Navigator.pushReplacement()` mengganti halaman teratas. Opsi Home pada drawer menutup drawer dengan `pop()`, kemudian mengganti halaman aktif dengan `MyHomePage` menggunakan `pushReplacement()`. Di Chrome, saya bisa menggunakan Home untuk kembali ke halaman utama.
+
+2. **Struktur halaman dan konsistensi tema**
+
+   `Scaffold` menyediakan kerangka halaman, `AppBar` menampilkan judul, dan `Drawer` menyediakan menu navigasi yang sama. Saya memakai `LeftDrawer` pada halaman utama, Tambah Proyek, dan Tambah Edukasi. AppBar halaman utama dan Edukasi sama-sama mengambil `primary` serta `onPrimary` dari `Theme.of(context).colorScheme`, sehingga mengikuti tema indigo dari `MyApp`.
+
+3. **Pemilihan tata letak formulir**
+
+   Saya menggunakan `Column` agar kolom dibaca berurutan dari atas ke bawah. `Padding` memberi jarak dari tepi layar dan `SizedBox` memisahkan input supaya tidak terlalu rapat. `SingleChildScrollView` membuat input serta tombol Simpan tetap bisa dijangkau pada layar sempit atau saat keyboard mengurangi tinggi halaman. `SafeArea` menjaga isi dari area sistem perangkat. Nama institusi dan program studi memakai `TextFormField`, sedangkan jenjang menggunakan dropdown karena pilihannya terbatas.
+
+4. **Peran key dan validasi**
+
+   `GlobalKey<FormState>` memberi akses ke state form. Saat Simpan ditekan, `validate()` menjalankan `validator` setiap input. Jika ada kesalahan, pesan muncul pada kolom dan dialog tidak dibuka. Contohnya, nama institusi berupa tiga spasi ditolak karena hasil `trim()` kosong; teks lebih dari 100 karakter juga ditolak. Setelah semua valid, `save()` mengambil teks yang sudah dirapikan lalu dialog menampilkan institusi, program studi, dan jenjang. Jenis keyboard hanya membantu mengetik, bukan menjamin isi valid, karena pengguna masih dapat menempelkan teks yang salah.
+
+#### Implementasi dan cara mencoba Tugas 8
+
+Form baru berada di `lib/screens/education_form.dart`. Kartu aksi berada di `lib/widgets/project_card.dart`, sedangkan navigasi bersama berada di `lib/widgets/left_drawer.dart`. Form hanya menyimpan isian sementara di memori dan menampilkan ringkasan; belum menyimpan data ke server.
+
+1. Jalankan aplikasi, lalu tekan kartu **Tambah Edukasi**.
+2. Tekan **Simpan** dengan kolom kosong atau hanya spasi: pesan kesalahan harus muncul.
+3. Isi institusi dan program studi (masing-masing maksimal 100 karakter), lalu pilih jenjang dan tekan **Simpan**. Periksa semua isian dalam dialog.
+4. Tekan **Tutup** untuk kembali ke form. Gunakan tombol kembali perangkat, atau menu **Home** pada drawer di Chrome.
+5. Buka ulang lewat opsi **Tambah Edukasi** pada drawer dan ulangi pada layar sempit.
+
+## AI Disclosure
+
+Saya menggunakan ChatGPT/Codex untuk membantu membaca tugas, mengecek proyek Tutorial 08, mengubah kode, membuat widget test. Strategi prompting saya bertahap: meminta pengecekan progres, mengikuti panduan instalasi, meminta untuk mengjarkan dan memandu mengerjakan tugas. Terkadang masih tidak mengerti tetapi meminta bantuan AI untuk memberi arahan kode saya secara otomatis dengan membaca tutorial juga sebagai acuan supaya mengerti
+
 
